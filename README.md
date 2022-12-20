@@ -2,7 +2,11 @@
 
 ## Npm install 
 
-``
-npm install express 
 
-``
+* express
+* nodemon
+* colors
+* dotenv
+* nodemailer
+
+## Create API Server structure 
