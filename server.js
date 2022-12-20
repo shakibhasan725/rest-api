@@ -1,10 +1,10 @@
 const express = require('express');
-const colors = require('colors');
 const dotenv = require('dotenv').config();
+const userRoutes = require('./routes/user');
 
 // init environment veriable
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 6050;
 
 //express initialization
 
@@ -14,6 +14,10 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// routes
+
+app.use('/api/v1/user', userRoutes);
 
 
 
