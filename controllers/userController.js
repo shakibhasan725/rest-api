@@ -24,6 +24,39 @@ const getAllUsers = (req, res) => {
 
 
 }
+
+
+/** 
+* @desc get single users data  
+* @name GET /api/v1/users/:id
+* @access public
+*/
+
+const getUser = (req, res) => {
+
+
+    // get all users from json DB
+    const allUsers = JSON.parse(readFileSync((path.join(__dirname, '../db/user.json'))));
+
+
+
+    const user = allUsers.find(user => user.id == req.params.id);
+
+    if (user) {
+        res.status(200).json(user);
+
+    } else {
+        res.status(400).json('User not found');
+    }
+}
+
+
+
+
+
+
+
+
 /** 
 * @desc Set users data  
 * @name POST /api/v1/users
@@ -64,8 +97,8 @@ const setUser = (req, res) => {
 }
 
 /** 
-* @desc get all users data  
-* @name GET /api/v1/users
+* @desc delete all users data  
+* @name Delete /api/v1/users/:id
 * @access public
 */
 
@@ -73,20 +106,21 @@ const deleteUser = (req, res) => {
     // get all users from json DB
     const allUsers = JSON.parse(readFileSync((path.join(__dirname, '../db/user.json'))));
 
-    const singleStudent = allUsers.filter(data = data.id);
 
 
 
+    if (allUsers.some(data => data.id == req.params.id)) {
 
+        const newStudent = allUsers.filter( data => data.id != req.params.id );
 
+        writeFileSync(path.join(__dirname, '../db/user.json'), JSON.stringify(newStudent));
 
+        res.status(200).json('Successfully Deleted User');
 
-
-
-
-
-    //send data
-    res.status(200).json(allUsers);
+    } else {
+        res.status(400).json('Invalid User');
+    }
+    
 
 
 }
@@ -97,5 +131,7 @@ const deleteUser = (req, res) => {
 
 module.exports = {
     getAllUsers,
-    setUser
+    setUser,
+    deleteUser,
+    getUser
 }
