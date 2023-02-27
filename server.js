@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const userRoutes = require('./routes/user');
+const teacherRoutes = require('./routes/teacher');
 
 // init environment veriable
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: false }));
 // routes
 
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/teacher', teacherRoutes);
 
 
 
