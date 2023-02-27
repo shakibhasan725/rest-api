@@ -40,13 +40,13 @@ const getUser = (req, res) => {
 
 
 
-    const user = allUsers.find(user => user.id == req.params.id);
+    const user = allUsers.find(data => data.id == req.params.id);
 
     if (user) {
         res.status(200).json(user);
 
     } else {
-        res.status(400).json('User not found');
+        res.status(404).json('User not found');
     }
 }
 
@@ -75,7 +75,7 @@ const setUser = (req, res) => {
 
      if (!name || !age) {
      
-         res.status(400).json(
+         res.status(404).json(
              {
                  message :'Name and age are required'
              }
@@ -118,12 +118,44 @@ const deleteUser = (req, res) => {
         res.status(200).json('Successfully Deleted User');
 
     } else {
-        res.status(400).json('Invalid User');
+        res.status(404).json('Invalid User');
     }
     
 
 
 }
+/** 
+* @desc Update users data  
+* @name put/patch /api/v1/users/:id
+* @access public
+*/
+
+const updateUser = (req, res) => {
+    // get all users from json DB
+    const allUsers = JSON.parse(readFileSync((path.join(__dirname, '../db/user.json'))));
+
+
+
+
+    if (allUsers.some(data => data.id == req.params.id)) {
+        allUsers[allUsers.findIndex(data => data.id == req.params.id)]={
+            ...allUsers[allUsers.findIndex(data => data.id == req.params.id)],
+            ...req.body 
+        }
+
+        writeFileSync(path.join(__dirname, '../db/user.json'), JSON.stringify(allUsers));
+
+        res.status(200).json('Successfully Upadted');
+        
+
+    } else {
+        res.status(404).json('Invalid User');
+    }
+    
+
+
+}
+
 
 
 
@@ -133,5 +165,6 @@ module.exports = {
     getAllUsers,
     setUser,
     deleteUser,
-    getUser
+    getUser,
+    updateUser
 }
